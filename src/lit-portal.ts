@@ -7,6 +7,9 @@ export class LitPortal extends LitElement {
   to?: string;
 
   @property()
+  containerClass = "";
+
+  @property()
   body = html``;
 
   @state()
@@ -38,6 +41,9 @@ export class LitPortal extends LitElement {
     container = document.createElement("div");
     container.id = this.uniqueID;
     container.className = "lit-portal__container";
+    if (this.containerClass !== "") {
+      container.className += ` ${this.containerClass}`;
+    }
     this.getDestination().appendChild(container);
     return container;
   }
