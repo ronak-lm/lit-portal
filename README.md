@@ -73,7 +73,7 @@ export class MyPage extends LitElement {
 - **Use Arrow Functions For Events**
 
   - For any event listeners attached within the `.body`, make sure they are arrow functions otherwise `this` doesn't work. A sample code below for your reference:
-  - ![Sample Code](/docs/event-listener.png)
+  - ![Sample Code](https://raw.githubusercontent.com/ronak-lm/lit-portal/master/docs/event-listener.png)
 
 - **Container Wrapped**
   - You can use the `<lit-portal />` multiple times in your layout. Each instance of it can also be portaled to the same destination element.
