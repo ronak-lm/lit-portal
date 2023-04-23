@@ -3,22 +3,20 @@ import { customElement, property, state } from "lit/decorators.js";
 
 @customElement("lit-portal")
 export class LitPortal extends LitElement {
-  @property()
-  to?: string;
+  // 1 - PROPERTIES & STATE
 
-  @property()
-  containerClass = "";
+  @property() to?: string;
+  @property() containerClass?: string;
+  @property() body = html``;
 
-  @property()
-  body = html``;
+  @state() uniqueID = `lit-portal-${Math.random().toString(36).substring(2)}`;
 
-  @state()
-  uniqueID = `lit-portal-${Math.random().toString(36).substring(2)}`;
+  // 2 - HELPERS
 
-  // Returns the element to which the body should be "portaled"
-  getDestination() {
+  // Returns the element to which the body should be "portal-ed"
+  private getOrCreateDestination() {
     let destination: HTMLElement | null = null;
-    if (this.to === undefined || this.to === null || this.to === "") {
+    if (typeof this.to !== "string" || this.to === "") {
       destination = document.body; // If no destination is specified, render in the document body
     } else {
       destination = document.getElementById(this.to); // Find the destination
@@ -31,8 +29,8 @@ export class LitPortal extends LitElement {
     return destination;
   }
 
-  // Returns the unique div inside the destination to which the body should be rendered
-  getContainer() {
+  // Returns the unique div inside the destination within which the body should be rendered
+  private getOrCreateContainer() {
     // Return the container if it already exists
     let container = document.getElementById(this.uniqueID);
     if (container) return container;
@@ -41,23 +39,37 @@ export class LitPortal extends LitElement {
     container = document.createElement("div");
     container.id = this.uniqueID;
     container.className = "lit-portal__container";
-    if (this.containerClass !== "") {
+    if (this.containerClass === undefined || this.containerClass === "") {
       container.className += ` ${this.containerClass}`;
     }
-    this.getDestination().appendChild(container);
+    this.getOrCreateDestination().appendChild(container);
     return container;
   }
 
-  // Render the body into the container
-  render() {
-    render(this.body, this.getContainer());
-    return;
+  private removeContainer() {
+    document.getElementById(this.uniqueID)?.remove();
   }
 
-  // Remove the container when the element is disconnected
+  // 3 - LIFECYCLE METHODS
+
+  // Whenever "to" changes, remove the old body and render it in the new destination
+  updated(changedProperties: Map<string, unknown>) {
+    super.updated(changedProperties);
+    if (changedProperties.has("to")) {
+      this.removeContainer();
+      render(this.body, this.getOrCreateContainer());
+    }
+  }
+
+  // Remove the container when the element is unmounted
   disconnectedCallback() {
-    this.getContainer().remove();
+    this.removeContainer();
     super.disconnectedCallback();
+  }
+
+  // Render function returns nothing since we don't want to render anything inline
+  render() {
+    return;
   }
 }
 
