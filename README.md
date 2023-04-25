@@ -66,9 +66,8 @@ export class MyPage extends LitElement {
 
 - **Shadow DOM Issues**
 
-  - This component uses `document.getElementById()` to find the destination (`to`) element and render the body within it.
-  - BUT if your destination is within a shadow root, `getElementById()` returns `null`. There is no feasible work around to this. Your destination MUST be in `document` and not within a shadow root.
-  - The `body` itself can have a shadow DOM. So you won't need to make any changes within your existing components that are being portaled.
+  - This component uses `document.getElementById()` to find the destination (`to`) element and render the body within it. If your destination is within a shadow root, `getElementById()` returns `null`. This is the default behavior in shadow DOMs and there is no feasible work around to this. Your destination MUST be in `document` and not within a shadow root.
+  - The `.body` that you pass itself can have a shadow DOM. So you won't need to make any changes within your existing shadow DOM components that are being portaled. Only the destination shouldn't be in a shadow DOM.
 
 - **Use Arrow Functions For Events**
 

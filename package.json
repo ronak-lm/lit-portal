@@ -1,7 +1,7 @@
 {
   "name": "lit-portal",
   "author": "Ronak Manglani <ronak_lm@outlook.com>",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
