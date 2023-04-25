@@ -6,7 +6,7 @@ export class LitPortal extends LitElement {
   // 1 - PROPERTIES & STATE
 
   @property() to?: string;
-  @property() containerClass?: string;
+  @property() containerClass = "";
   @property() body = html``;
 
   @state() uniqueID = `lit-portal-${Math.random().toString(36).substring(2)}`;
@@ -38,10 +38,7 @@ export class LitPortal extends LitElement {
     // Create the container if it does not exist
     container = document.createElement("div");
     container.id = this.uniqueID;
-    container.className = "lit-portal__container";
-    if (this.containerClass === undefined || this.containerClass === "") {
-      container.className += ` ${this.containerClass}`;
-    }
+    container.className = this.containerClass;
     this.getOrCreateDestination().appendChild(container);
     return container;
   }
@@ -52,12 +49,17 @@ export class LitPortal extends LitElement {
 
   // 3 - LIFECYCLE METHODS
 
-  // Whenever "to" changes, remove the old body and render it in the new destination
+  // React to changes in to, containerClass and body
   updated(changedProperties: Map<string, unknown>) {
-    super.updated(changedProperties);
+    // If the destination has changed, remove the old container and create a new one
     if (changedProperties.has("to")) {
       this.removeContainer();
-      render(this.body, this.getOrCreateContainer());
+    }
+    render(this.body, this.getOrCreateContainer()); // Re-render the body
+
+    // If the containerClass has changed, update the class of the container
+    if (changedProperties.has("containerClass")) {
+      this.getOrCreateContainer().className = this.containerClass;
     }
   }
 
