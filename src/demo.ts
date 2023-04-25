@@ -41,7 +41,7 @@ export class DemoPage extends LitElement {
         </div>
 
         <!-- The Portal Component -->
-        <lit-portal to=${this.location} .body=${html`<test-btn></test-btn>`}></lit-portal>
+        <lit-portal to=${this.location} .body=${html`<count-btn></count-btn>`}></lit-portal>
       </div>
     `;
   }
@@ -52,19 +52,28 @@ export class DemoPage extends LitElement {
   }
 }
 
-@customElement("test-btn")
-export class TestBtn extends LitElement {
+@customElement("count-btn")
+export class CountButton extends LitElement {
+  @state() count = 0;
+
+  incrementCount() {
+    this.count++;
+  }
+
   connectedCallback() {
     super.connectedCallback();
-    console.log("<test-btn/> Connected");
+    console.log("<count-btn/> Connected");
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    console.log("<test-btn/> Disconnected");
+    console.log("<count-btn/> Disconnected");
   }
 
   render() {
-    return html`<button>Portaled Button</button>`;
+    return html`
+      <button @click=${this.incrementCount}>Increment Count</button>
+      <div>Count: ${this.count}</div>
+    `;
   }
 }
